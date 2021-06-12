@@ -2,7 +2,7 @@
 Contributors: elliotcondon
 Tags: acf, fields, custom fields, meta, repeater
 Requires at least: 4.7
-Tested up to: 5.5
+Tested up to: 5.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,61 @@ From your WordPress dashboard
 
 
 == Changelog ==
+
+= 5.9.6 =
+*Release Date - 20 May 2021*
+
+* Enhancement - Added 'position' setting compatibility for Options Page submenus.
+* Enhancement - Visually highlight "High" metabox area when dragging metaboxes.
+* Fix - Fixed compatibility issue between Block matrix alignment setting and the latest version of Gutenberg (10.6).
+* Fix - Fixed bug breaking WYSIWYG field after reordering a child block via the block's toolbar up/down buttons.
+* Fix - Added missing "readonly" and "disabled" attributes to DateTime and Time picker fields.
+* Fix - Fixed bug incorrectly validating Email field values containing special characters.
+* Fix - Fixed missing "dashicons" asset dependency from front-end forms.
+* Fix - Fixed bug causing Review JSON diff modal to appear with narrow column since WP 5.7.
+* Dev - Added label elements to Repeater, Flexible Content and Clone field's table header titles.
+* Dev - Added new `ACF_EXPERIMENTAL_ESC_HTML` constant. [Read more](https://github.com/AdvancedCustomFields/acf/issues/500)
+
+= 5.9.5 =
+*Release Date - 11 February 2021*
+
+* Fix - Fixed regression preventing blocks from loading correctly within the editor in WordPress 5.5.
+* Fix - Fixed bug causing incorrect post_status properties when restoring a Field Group from trash in WordPress 5.6.
+* Fix - Fixed edge case bug where a taxonomy named "options" could interfere with saving and loading option values.
+* Fix - Fixed additional PHP 8.0 warnings.
+* i18n - Updated Finnish translation thanks to Mikko Kekki
+
+= 5.9.4 =
+*Release Date - 14 January 2021*
+
+* Enhancement - Added PHP validation for the Email field (previously relied solely on browser validation).
+* Fix - Added support for PHP 8.0 (fixed logged warnings).
+* Fix - Added support for jQuery 3.5 (fixed logged warnings).
+* Fix - Fixed bug causing WYSIWYG field to appear unresponsive within the Gutenberg editor.
+* Fix - Fixed regression preventing "blog_%d" and "site_%d" as valid `$post_id` values for custom Taxonomy terms.
+* Fix - Fixed bug causing Radio field label to select first choice.
+* Fix - Fixed bug preventing preloading blocks that contain multiple parent DOM elements.
+* i18n - Updated Japanese translation thanks to Ryo Takahashi.
+* i18n - Updated Portuguese translation thanks to Pedro Mendonça.
+
+= 5.9.3 =
+*Release Date - 3 November 2020*
+
+* Fix - Fixed bug causing Revision meta to incorrectly update the parent Post meta.
+* Fix - Fixed bug breaking "Filter by Post Type" and "Filter by Taxonomy" Field settings.
+
+= 5.9.2 =
+*Release Date - 29 October 2020*
+
+* Enhancement - Added experiment for preloading block HTML and reducing AJAX requests on page load.
+* Fix - Added boolean attribute value detection to JSX parser (fixes issue with templateLock="false").
+* Fix - Added "dateTime" attribute to JSX parser ruleset.
+* Fix - Fixed unresponsive Select2 instances after duplicating a row or layout.
+* Fix - Added missing Color Picker script translations for previous WordPress versions.
+* Fix - Fixed bug in Clone Field causing potential PHP error if cloning a Field Group that no longer exists.
+* Fix - Fixed PHP warning logged when comparing a revision that contains values for a Field that no longer exist.
+* Dev - Added `$wp_block` parameter to block render_callback and render_template (unavailable during AJAX preview requests).
+* Dev - Deprecated `acf_get_term_post_id()` function.
 
 = 5.9.1 =
 *Release Date - 8 September 2020*

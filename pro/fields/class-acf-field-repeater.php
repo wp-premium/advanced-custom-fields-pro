@@ -246,36 +246,31 @@ class acf_field_repeater extends acf_field {
 				
 				<?php foreach( $sub_fields as $sub_field ): 
 					
-					// prepare field (allow sub fields to be removed)
+					// Prepare field (allow sub fields to be removed).
 					$sub_field = acf_prepare_field($sub_field);
-					
-					
-					// bail ealry if no field
-					if( !$sub_field ) continue;
-					
-					
-					// vars
-					$atts = array();
-					$atts['class'] = 'acf-th';
-					$atts['data-name'] = $sub_field['_name'];
-					$atts['data-type'] = $sub_field['type'];
-					$atts['data-key'] = $sub_field['key'];
-					
-					
-					// Add custom width
-					if( $sub_field['wrapper']['width'] ) {
-					
-						$atts['data-width'] = $sub_field['wrapper']['width'];
-						$atts['style'] = 'width: ' . $sub_field['wrapper']['width'] . '%;';
-						
+					if( !$sub_field ) {
+						continue;
 					}
 					
+					// Define attrs.
+					$attrs = array();
+					$attrs['class'] = 'acf-th';
+					$attrs['data-name'] = $sub_field['_name'];
+					$attrs['data-type'] = $sub_field['type'];
+					$attrs['data-key'] = $sub_field['key'];
+					
+					if( $sub_field['wrapper']['width'] ) {
+						$attrs['data-width'] = $sub_field['wrapper']['width'];
+						$attrs['style'] = 'width: ' . $sub_field['wrapper']['width'] . '%;';
+					}
+					
+					// Remove "id" to avoid "for" attribute on <label>.
+					$sub_field['id'] = '';
+					
 					?>
-					<th <?php echo acf_esc_attr( $atts ); ?>>
-						<?php echo acf_get_field_label( $sub_field ); ?>
-						<?php if( $sub_field['instructions'] ): ?>
-							<p class="description"><?php echo $sub_field['instructions']; ?></p>
-						<?php endif; ?>
+					<th <?php acf_esc_attr_e( $attrs ); ?>>
+						<?php acf_render_field_label( $sub_field ); ?>
+						<?php acf_render_field_instructions( $sub_field ); ?>
 					</th>
 				<?php endforeach; ?>
 
@@ -293,7 +288,7 @@ class acf_field_repeater extends acf_field {
 			$id = ( $i === 'acfcloneindex' ) ? 'acfcloneindex' : "row-$i";
 			
 			?>
-			<tr class="acf-row<?php if( $i === 'acfcloneindex' ){ echo ' acf-clone'; } ?>" data-id="<?php echo $id; ?>">
+			<tr class="acf-row<?php if( $i === 'acfcloneindex' ){ echo ' acf-clone'; } ?>" data-id="<?php echo esc_attr( $id ); ?>">
 				
 				<?php if( $show_order ): ?>
 					<td class="acf-row-handle order" title="<?php _e('Drag to reorder','acf'); ?>">
@@ -348,7 +343,7 @@ class acf_field_repeater extends acf_field {
 <?php if( $show_add ): ?>
 	
 	<div class="acf-actions">
-		<a class="acf-button button button-primary" href="#" data-event="add-row"><?php echo $field['button_label']; ?></a>
+		<a class="acf-button button button-primary" href="#" data-event="add-row"><?php echo acf_esc_html( $field['button_label'] ); ?></a>
 	</div>
 			
 <?php endif; ?>
@@ -703,23 +698,19 @@ class acf_field_repeater extends acf_field {
 	}
 	
 	
-	/*
-	*  update_row
-	*
-	*  This function will update a value row
-	*
-	*  @type	function
-	*  @date	15/2/17
-	*  @since	5.5.8
-	*
-	*  @param	$i (int)
-	*  @param	$field (array)
-	*  @param	$post_id (mixed)
-	*  @return	(boolean)
-	*/
-	
-	function update_row( $row, $i = 0, $field, $post_id ) {
-		
+	/**
+	 * This function will update a value row.
+	 *
+	 * @date	15/2/17
+	 * @since	5.5.8
+	 *
+	 * @param	array $row
+	 * @param	int $i
+	 * @param	array $field
+	 * @param	mixed $post_id
+	 * @return	boolean
+	 */
+	function update_row( $row, $i, $field, $post_id ) {
 		// bail early if no layout reference
 		if( !is_array($row) ) return false;
 		
@@ -769,23 +760,19 @@ class acf_field_repeater extends acf_field {
 	}
 	
 	
-	/*
-	*  delete_row
-	*
-	*  This function will delete a value row
-	*
-	*  @type	function
-	*  @date	15/2/17
-	*  @since	5.5.8
-	*
-	*  @param	$i (int)
-	*  @param	$field (array)
-	*  @param	$post_id (mixed)
-	*  @return	(boolean)
-	*/
-	
-	function delete_row( $i = 0, $field, $post_id ) {
-		
+	/**
+	 * This function will delete a value row.
+	 *
+	 * @date	15/2/17
+	 * @since	5.5.8
+	 *
+	 * @param	int $i
+	 * @param	array $field
+	 * @param	mixed $post_id
+	 * @return	boolean
+	 */
+	function delete_row( $i, $field, $post_id ) {
+
 		// bail early if no sub fields
 		if( empty($field['sub_fields']) ) return false;
 		

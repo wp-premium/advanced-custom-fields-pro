@@ -124,6 +124,20 @@ function acf_request_args( $args = array() ) {
 	return $args;
 }
 
+/**
+ * Returns a single $_REQUEST arg with fallback.
+ *
+ * @date	23/10/20
+ * @since	5.9.2
+ *
+ * @param	string $key The property name.
+ * @param	mixed $default The default value to fallback to.
+ * @return	mixed
+ */
+function acf_request_arg( $name = '', $default = null ) {
+	return isset( $_REQUEST[ $name ] ) ? $_REQUEST[ $name ] : $default;
+}
+
 // Register store.
 acf_register_store( 'filters' );
 
@@ -349,9 +363,7 @@ function acf_slugify( $str = '', $glue = '-' ) {
 }
 
 /**
- * acf_punctify
- *
- * Returns a string with correct full stop puctuation.
+ * Returns a string with correct full stop punctuation.
  *
  * @date	12/7/19
  * @since	5.8.2
@@ -360,7 +372,10 @@ function acf_slugify( $str = '', $glue = '-' ) {
  * @return	string
  */
 function acf_punctify( $str = '' ) {
-	return trim($str, '.') . '.';
+	if ( substr( trim( strip_tags( $str ) ), -1) !== '.' ) {
+		return trim( $str ) . '.';
+	}
+	return trim( $str );
 }
 
 /**
@@ -435,4 +450,21 @@ function acf_doing_action( $action ) {
 		return $wp_filter[ $action ]->current_priority();
 	}
 	return false;
+}
+
+/**
+ * Returns the current URL.
+ *
+ * @date	23/01/2015
+ * @since	5.1.5
+ *
+ * @param	void
+ * @return	string
+ */
+function acf_get_current_url() {
+	// Ensure props exist to avoid PHP Notice during CLI commands.
+	if( isset( $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'] ) ) {
+		return ( is_ssl() ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	}
+	return '';
 }

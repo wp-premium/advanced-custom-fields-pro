@@ -194,30 +194,27 @@ class acf_field_clone extends acf_field {
 		$this->cloning[ $field['key'] ] = 1;
 		
 		
-		// loop
+		// Loop over selectors and load fields.
 		foreach( $field['clone'] as $selector ) {
 			
-			// field group
+			// Field Group selector.
 			if( acf_is_field_group_key($selector) ) {
 				
-				// vars
-				$field_group = acf_get_field_group($selector);
-				$field_group_fields = acf_get_fields($field_group);
+				$field_group = acf_get_field_group( $selector );
+				if( !$field_group ) {
+					continue;
+				}
 				
+				$field_group_fields = acf_get_fields( $field_group );
+				if( !$field_group_fields ) {
+					continue;
+				}
 				
-				// bail early if no fields
-				if( !$field_group_fields ) continue;
+				$fields = array_merge( $fields, $field_group_fields );
 				
-				
-				// append
-				$fields = array_merge($fields, $field_group_fields);
-				
-			// field
+			// Field selector.
 			} elseif( acf_is_field_key($selector) ) {
-				
-				// append
-				$fields[] = acf_get_field($selector);
-				
+				$fields[] = acf_get_field( $selector );
 			}
 			
 		}
@@ -734,37 +731,28 @@ class acf_field_clone extends acf_field {
 		<tr>
 		<?php foreach( $field['sub_fields'] as $sub_field ): 
 			
-			// prepare field (allow sub fields to be removed)
+			// Prepare field (allow sub fields to be removed).
 			$sub_field = acf_prepare_field($sub_field);
-			
-			
-			// bail ealry if no field
-			if( !$sub_field ) continue;
-			
-			
-			// vars
-			$atts = array();
-			$atts['class'] = 'acf-th';
-			$atts['data-name'] = $sub_field['_name'];
-			$atts['data-type'] = $sub_field['type'];
-			$atts['data-key'] = $sub_field['key'];
-			
-			
-			// Add custom width
-			if( $sub_field['wrapper']['width'] ) {
-			
-				$atts['data-width'] = $sub_field['wrapper']['width'];
-				$atts['style'] = 'width: ' . $sub_field['wrapper']['width'] . '%;';
-				
+			if( !$sub_field ) {
+				continue;
 			}
 			
+			// Define attrs.
+			$attrs = array();
+			$attrs['class'] = 'acf-th';
+			$attrs['data-name'] = $sub_field['_name'];
+			$attrs['data-type'] = $sub_field['type'];
+			$attrs['data-key'] = $sub_field['key'];
+			
+			if( $sub_field['wrapper']['width'] ) {
+				$attrs['data-width'] = $sub_field['wrapper']['width'];
+				$attrs['style'] = 'width: ' . $sub_field['wrapper']['width'] . '%;';
+			}
 				
 			?>
-			<th <?php acf_esc_attr_e( $atts ); ?>>
-				<?php echo acf_get_field_label( $sub_field ); ?>
-				<?php if( $sub_field['instructions'] ): ?>
-					<p class="description"><?php echo $sub_field['instructions']; ?></p>
-				<?php endif; ?>
+			<th <?php acf_esc_attr_e( $attrs ); ?>>
+				<?php acf_render_field_label( $sub_field ); ?>
+				<?php acf_render_field_instructions( $sub_field ); ?>
 			</th>
 		<?php endforeach; ?>
 		</tr>
